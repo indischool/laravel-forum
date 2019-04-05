@@ -20,7 +20,7 @@ class CreateThreadTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_new_forum_thread()
+    public function an_authenticated_user_can_create_new_forum_threads()
     {
         $this->withoutExceptionHandling();
 
@@ -61,7 +61,7 @@ class CreateThreadTest extends TestCase
             ->assertSessionHasErrors('channel_id');
     }
 
-    public function publishThread($overrides = [])
+    protected function publishThread($overrides = [])
     {
         $this->signIn();
 
