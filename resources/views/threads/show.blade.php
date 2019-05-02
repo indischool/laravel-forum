@@ -6,8 +6,22 @@
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header">
-                    <a href="{{ route('profile', $thread->creator->name) }}">{{ $thread->creator->name }}</a> posted:
-                    {{ $thread->title }}
+                    <div class="level">
+                        <span class="flex">
+                            작성자: <a
+                                href="{{ route('profile', $thread->creator->name) }}">{{ $thread->creator->name }}</a>,
+                            {{ $thread->title }}
+                        </span>
+
+                        <form action="{{ $thread->path() }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-link">스레드 삭제</button>
+
+                        </form>
+                    </div>
+
                 </div>
 
                 <div class="card-body">

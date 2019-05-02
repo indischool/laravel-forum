@@ -61,6 +61,34 @@ class CreateThreadTest extends TestCase
             ->assertSessionHasErrors('channel_id');
     }
 
+    /** @test */
+    public function 게스트는_스레드를_삭제할_수_없다()
+    {
+        $thread = create('App\Thread');
+
+        $response = $this->delete($thread->path())
+            ->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function 스레드를_삭제할_수_있다()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = create('App\Reply', ['thread_id' => $thread->id]);
+
+        $response = $this->json('DELETE', $thread->path())
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /** @test */
+    public function 스레드는_권한이_있는_사용자만_삭제할_수_있다()
+    { }
+
     protected function publishThread($overrides = [])
     {
         $this->signIn();
