@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            @foreach($threads as $thread)
+            @forelse($threads as $thread)
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="level">
@@ -25,7 +25,9 @@
                     </article>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <p>관련 글타래가 없습니다.</p>
+            @endforelse
         </div>
     </div>
 </div>

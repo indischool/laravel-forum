@@ -13,6 +13,7 @@
                             {{ $thread->title }}
                         </span>
 
+                        @can('update', $thread)
                         <form action="{{ $thread->path() }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -20,6 +21,7 @@
                             <button type="submit" class="btn btn-link">스레드 삭제</button>
 
                         </form>
+                        @endcan
                     </div>
 
                 </div>

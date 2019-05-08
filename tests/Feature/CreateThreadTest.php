@@ -62,20 +62,22 @@ class CreateThreadTest extends TestCase
     }
 
     /** @test */
-    public function 게스트는_스레드를_삭제할_수_없다()
+    public function 권한이_없는_사용자는_스레드를_삭제할_수_없다()
     {
         $thread = create('App\Thread');
 
-        $response = $this->delete($thread->path())
-            ->assertRedirect('/login');
+        $this->delete($thread->path())->assertRedirect('/login');
+
+        $this->signIn();
+        $this->delete($thread->path())->assertStatus(403);
     }
 
     /** @test */
-    public function 스레드를_삭제할_수_있다()
+    public function 권한이_있는_사용자는_스레드를_삭제할_수_있다()
     {
         $this->signIn();
 
-        $thread = create('App\Thread');
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
         $reply = create('App\Reply', ['thread_id' => $thread->id]);
 
         $response = $this->json('DELETE', $thread->path())
@@ -84,10 +86,6 @@ class CreateThreadTest extends TestCase
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
-
-    /** @test */
-    public function 스레드는_권한이_있는_사용자만_삭제할_수_있다()
-    { }
 
     protected function publishThread($overrides = [])
     {
