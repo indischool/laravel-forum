@@ -13,7 +13,7 @@
                         <div class="form-group">
                             <label for="channel">Choose a Channel:</label>
                             <select class="form-control" name="channel_id" id="channel_id" required>
-                                <option>Choose One...</option>
+                                <option value="">Choose One...</option>
                                 @foreach($channels as $channel)
                                 <option value="{{ $channel->id }}"
                                     {{ old('channel_id') == $channel->id ? 'selected' : '' }}>{{ $channel->name }}
@@ -29,7 +29,8 @@
 
                         <div class="form-group">
                             <label for="body">Body:</label>
-                            <textarea class="form-control" name="body" id="body" rows="8" required>{{ old('body') }}</textarea>
+                            <textarea class="form-control" name="body" id="body" rows="8"
+                                required>{{ old('body') }}</textarea>
                         </div>
 
                         <div class="form-group">

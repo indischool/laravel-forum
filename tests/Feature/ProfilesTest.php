@@ -23,15 +23,13 @@ class ProfilesTest extends TestCase
     /** @test */
     public function 프로필_페이지에는_사용자가_작성한_모든_스레드를_표시한다()
     {
-        $user = create('App\User', [
-            'name' => 'John'
-        ]);
+        $this->signIn();
 
         $thread = create('App\Thread', [
-            'user_id' => $user->id
+            'user_id' => auth()->id()
         ]);
 
-        $this->get("/profiles/{$user->name}")
+        $this->get("/profiles/" . urlencode(auth()->user()->name))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }
