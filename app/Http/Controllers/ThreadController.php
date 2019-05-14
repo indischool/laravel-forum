@@ -66,7 +66,8 @@ class ThreadController extends Controller
             'body' => request('body')
         ]);
 
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', '글타래를 작성하였습니다.');
     }
 
     /**
