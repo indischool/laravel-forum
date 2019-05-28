@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use Illuminate\Http\Request;
+use App\Reply;
 
 class ReplyController extends Controller
 {
@@ -23,5 +25,14 @@ class ReplyController extends Controller
         ]);
 
         return back()->with('flash', '댓글을 작성하였습니다.');
+    }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return back();
     }
 }
