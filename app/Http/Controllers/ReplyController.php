@@ -27,6 +27,13 @@ class ReplyController extends Controller
         return back()->with('flash', '댓글을 작성하였습니다.');
     }
 
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->update(request(['body']));
+    }
+
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);

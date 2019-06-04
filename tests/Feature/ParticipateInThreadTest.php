@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ParticipateInForumTest extends TestCase
+class ParticipateInThreadTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -58,6 +58,19 @@ class ParticipateInForumTest extends TestCase
     }
 
     /** @test */
+    public function 권한이_없는_사용자는_댓글을_수정할_수_없다()
+    {
+        $reply = create('App\Reply');
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn()
+            ->patch("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test */
     public function 권한이_있는_사용자는_댓글을_삭제할_수_있다()
     {
         $this->signIn();
@@ -67,5 +80,18 @@ class ParticipateInForumTest extends TestCase
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /** @test */
+    public function 권한이_있는_사용자는_댓글을_수정할_수_있다()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $updatedReply = "내용을 변경했습니다.";
+        $this->patch("/replies/{$reply->id}", ['body' => $updatedReply]);
+
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedReply]);
     }
 }
