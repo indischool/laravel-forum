@@ -16,6 +16,13 @@ export default {
       this.editing = false;
 
       flash("수정되었습니다!");
+    },
+    destroy() {
+      axios.delete("/replies/" + this.attributes.id);
+
+      $(this.$el).fadeOut(300, () => {
+        flash("댓글이 삭제되었습니다.");
+      });
     }
   }
 };
