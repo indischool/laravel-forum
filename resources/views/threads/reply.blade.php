@@ -5,17 +5,12 @@
                 <h5 class="flex">
                     <a href="{{ route('profile', $reply->owner->name) }}">
                         {{ $reply->owner->name }}
-                    </a> said {{ $reply->created_at->diffForHumans() }}...
+                    </a>
+                    said {{ $reply->created_at->diffForHumans() }}...
                 </h5>
 
                 <div>
-                    <form method="POST" action="/replies/{{ $reply->id }}/favorites">
-                        @csrf
-
-                        <button type="submit" class="btn btn-outline-primary"
-                            {{ $reply->isFavorited() ? 'disabled' : ''}}>좋아요
-                            {{ $reply->favorites_count }}개</button>
-                    </form>
+                    <favorite :reply="{{ $reply }}"></favorite>
                 </div>
             </div>
         </div>
@@ -33,10 +28,10 @@
         </div>
 
         @can('update', $reply)
-        <div class="card-footer level">
-            <button class="btn btn-secondary btn-sm mr-1" @click="editing = true">수정</button>
-            <button class="btn btn-danger btn-sm mr-1" @click="destroy">삭제</button>
-        </div>
+            <div class="card-footer level">
+                <button class="btn btn-secondary btn-sm mr-1" @click="editing = true">수정</button>
+                <button class="btn btn-danger btn-sm mr-1" @click="destroy">삭제</button>
+            </div>
         @endcan
     </div>
 </reply>

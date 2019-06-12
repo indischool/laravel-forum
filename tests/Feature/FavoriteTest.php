@@ -13,7 +13,7 @@ class FavoriteTest extends TestCase
     public function guests_can_not_favorite_anything()
     {
         $this->post('replies/1/favorites')
-         ->assertRedirect('/login');
+            ->assertRedirect('/login');
     }
 
     /** @test */
@@ -23,9 +23,23 @@ class FavoriteTest extends TestCase
 
         $reply = create('App\Reply');
 
-        $this->post('replies/' . $reply->id . '/favorites');
+        $this->post('replies/'.$reply->id.'/favorites');
 
         $this->assertCount(1, $reply->favorites);
+    }
+
+    /** @test */
+    public function 권한이_있는_사용자는_댓글_좋아요를_취소할_수_있다()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply');
+
+        $reply->favorite();
+
+        $this->delete('replies/'.$reply->id.'/favorites');
+        
+        $this->assertCount(0, $reply->favorites);
     }
 
     /** @test */
@@ -36,8 +50,8 @@ class FavoriteTest extends TestCase
         $reply = create('App\Reply');
 
         try {
-            $this->post('replies/' . $reply->id . '/favorites');
-            $this->post('replies/' . $reply->id . '/favorites');
+            $this->post('replies/'.$reply->id.'/favorites');
+            $this->post('replies/'.$reply->id.'/favorites');
         } catch (\Exception $e) {
             $this->fail('Did not expect to insert the same record set twice.');
         }

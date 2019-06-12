@@ -24,9 +24,20 @@ trait Favoritable
     public function favorite()
     {
         $attributes = ['user_id' => auth()->id()];
+
         if (!$this->favorites()->where($attributes)->exists()) {
             return $this->favorites()->create($attributes);
         }
+    }
+
+    /**
+     * 현재 댓글의 좋아요 취소
+     */
+    public function unfavorite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        $this->favorites()->where($attributes)->delete();
     }
 
     /**
@@ -36,7 +47,12 @@ trait Favoritable
      */
     public function isFavorited()
     {
-        return (bool)$this->favorites->where('user_id', auth()->id())->count();
+        return (bool) $this->favorites->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
     }
 
     /**

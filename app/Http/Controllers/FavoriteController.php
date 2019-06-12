@@ -17,7 +17,7 @@ class FavoriteController extends Controller
     /**
      * Store a new favorite in the database.
      *
-     * @param  Reply $reply
+     * @param  Reply  $reply
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function store(Reply $reply)
@@ -25,5 +25,10 @@ class FavoriteController extends Controller
         $reply->favorite();
 
         return back();
+    }
+
+    public function destroy(Reply $reply)
+    {
+        $reply->unfavorite();
     }
 }
